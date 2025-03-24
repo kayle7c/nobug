@@ -3,7 +3,7 @@
 #include <stdio.h>
 #include <stdarg.h>
 
-//extern struct ringbuffer shell_ringbuffer;
+extern struct ringbuffer shell_ringbuffer;
 
 void nobug_serial_Init(void)
 {
@@ -76,13 +76,13 @@ int fputc(int ch, FILE *f)
 }
 
 
-void USART1_IRQHandler(void)                	//´®¿Ú1ÖÐ¶Ï·þÎñ³ÌÐò
+void USART1_IRQHandler(void)                	//ï¿½ï¿½ï¿½ï¿½1ï¿½Ð¶Ï·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 {
 	u8 Res;
 	if(USART_GetITStatus(USART1, USART_IT_RXNE) != RESET)  
 	{
-			Res =USART_ReceiveData(USART1);	//¶ÁÈ¡½ÓÊÕµ½µÄÊý¾Ý
-			//ringbuffer_putchar(&shell_ringbuffer,Res);
+			Res =USART_ReceiveData(USART1);	//ï¿½ï¿½È¡ï¿½ï¿½ï¿½Õµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+			ringbuffer_putchar(&shell_ringbuffer,Res);
 	}
 } 
 

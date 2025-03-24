@@ -1,5 +1,6 @@
 #include "shell.h"
 #include "cmd.h"
+#include "ringbuffer.h"
 
 int cmd_table[CMD_NUM_MAX];
 int current_cmd_num=0;
@@ -42,7 +43,6 @@ void shell_match(char *cmd,ky_size_t length)
 		printf("cmd not found!");
 		printf("\r\n");
 		printf("ky />");
-#endif 
 }
 
 ky_size_t shell_auto_complete(char* cmd,ky_size_t length)
@@ -71,7 +71,7 @@ ky_size_t shell_auto_complete(char* cmd,ky_size_t length)
 						printf("\b \b");
 				}
 				printf("%s",cmd_table[cmd_index].name);
-				ky_strncpy(shell->cmd,cmd_table[cmd_index].name,cmd_table[cmd_index].cmd_length);
+				my_strncpy(shell->cmd,cmd_table[cmd_index].name,cmd_table[cmd_index].cmd_length);
 				shell->position=cmd_table[cmd_index].cmd_length;
 		}
 		else
@@ -105,8 +105,8 @@ void shell_thread_entry()
 						continue;
 				}
 //***************************************************************
-//*********************´¦Àí·½Ïò¼ü********************************
-#if 0   //·½Ïò¼üÎ´ÍêÉÆ
+//*********************ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½********************************
+#if 0   //ï¿½ï¿½ï¿½ï¿½ï¿½Î´ï¿½ï¿½ï¿½ï¿½
 				if(ch==0x1b)
 				{
 						shell->stat=WAIT_DIR_KEY;
@@ -174,29 +174,29 @@ void shell_thread_entry()
 				}
 #endif
 //***************************************************************
-//*********************´¦Àítab¼ü*********************************
+//*********************ï¿½ï¿½ï¿½ï¿½tabï¿½ï¿½*********************************
 				if(ch=='\t')
 				{
 						shell_auto_complete(shell->cmd,shell->position);
 						continue;
 				}
 //***************************************************************
-//*********************´¦ÀíÍË¸ñ¼ü********************************
+//*********************ï¿½ï¿½ï¿½ï¿½ï¿½Ë¸ï¿½ï¿½********************************
 				else if(ch==0x08)
 				{
-						//¹â±êÎ»ÖÃÔÚ¿ªÍ·
+						//ï¿½ï¿½ï¿½Î»ï¿½ï¿½ï¿½Ú¿ï¿½Í·
 						if(shell->curpos==0)
 						{
 								continue;
 						}
 						shell->position--;
 						shell->curpos--;
-						printf("\b \b");   //¹â±ê»ØÍË
+						printf("\b \b");   //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 						shell->cmd[shell->curpos]=0;
 						continue;
 				}
 //***************************************************************
-//*********************´¦Àí»Ø³µ¼ü********************************				
+//*********************ï¿½ï¿½ï¿½ï¿½ï¿½Ø³ï¿½ï¿½ï¿½********************************				
 				else if(ch=='\r'||ch=='\n')
 				{
 						printf("\r\n");
@@ -217,10 +217,10 @@ void shell_thread_entry()
 						continue;
 				}
 ////***************************************************************
-////*********************´¦Àí³£¹æ×Ö·û******************************		
+////*********************ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö·ï¿½******************************		
 				if(shell->curpos<shell->position)
 				{
-						ky_memmove(&shell->cmd[shell->curpos+1],
+						my_memmove(&shell->cmd[shell->curpos+1],
 											 &shell->cmd[shell->curpos],
 											 shell->position-shell->curpos);
 						shell->cmd[shell->curpos]=ch;
@@ -258,7 +258,6 @@ void system_cmd_init()
 {
 		cmd_list_add("version",7,cmd_version,KY_NULL);
 		cmd_list_add("clear",5,cmd_clear,KY_NULL);
-		cmd_list_add("ps",2,cmd_ps,KY_NULL);
 		cmd_list_add("reboot",6,cmd_reboot,KY_NULL);
 		cmd_list_add("help",4,cmd_help,KY_NULL);
 }		
